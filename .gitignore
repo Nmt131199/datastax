@@ -1,3 +1,14 @@
+
+models/
+datasets/imports/
+datasets/zips/
+bin
+include
+lib
+share
+etc
+
+
 .git-crypt
 .DS_Store
 bin/
