@@ -1,12 +1,15 @@
-
+app/ignored
 models/
 datasets/imports/
 datasets/zips/
+datasets/exports/*.json
+datasets/spam-classifier
 bin
 include
 lib
 share
 etc
+*.pkl
 
 
 .git-crypt
