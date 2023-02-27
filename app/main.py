@@ -47,10 +47,9 @@ def read_index(q:Optional[str] = None):
 @app.post("/")
 def create_inference(query:schema.Query):
     global AI_MODEL
-    query = q or "hello world"
-    preds_dict = AI_MODEL.predict_text(query)
+    preds_dict = AI_MODEL.predict_text(query.q)
     top = preds_dict.get('top') # {label: , conf}
-    data = {"query": query, **top}
+    data = {"query": query.q, **top}
     obj = SMSInference.objects.create(**data)
     # NoSQL -> cassandra -> Datastax AstraDB
     return obj
@@ -70,13 +69,13 @@ def fetch_rows(stmt: SimpleStatement, fetch_size:int = 25, session=None):
 
     stmt.fetch_size = fetch_size
     result_set = session.execute(stmt)
-    has_pages = result_set.has_more_pages
+    # has_pages = result_set.has_more_pages
     yield "uuid,label,confidence,query,version\n"
-    while has_pages:
-        for row in result_set.current_rows:
-            yield f"{row['uuid']},{row['label']},{row['confidence']},{row['query']},{row['model_version']}\n"
-        has_pages = result_set.has_more_pages
-        result_set = session.execute(stmt, paging_state=result_set.paging_state)
+    # while has_pages:
+    for row in result_set.current_rows:
+        yield f"{row['uuid']},{row['label']},{row['confidence']},{row['query']},{row['model_version']}\n"
+    has_pages = result_set.has_more_pages
+    result_set = session.execute(stmt, paging_state=result_set.paging_state)
 
 
 @app.get("/dataset")
