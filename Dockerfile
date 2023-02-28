@@ -4,6 +4,7 @@ COPY .env /app/.env
 COPY ./app /app/app
 COPY ./requirements.txt ./app/requirements.txt
 COPY ./entrypoint.sh /app/entrypoint.sh
+RUN chmod +x entrypoint.sh
 
 WORKDIR /app
 
